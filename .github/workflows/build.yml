@@ -21,3 +21,5 @@ jobs:
         run: go build -v ./cmd/challenge_1_echo
       - name: "Build Challenge 2: unique id generation"
         run: go build -v ./cmd/challenge_2_unique_id_generation
+      - name: "Build Challenge 3a: single-node broadcast"
+        run: go build -v ./cmd/challenge_3a_single_node_broadcast
