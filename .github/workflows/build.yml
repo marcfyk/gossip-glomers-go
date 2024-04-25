@@ -17,5 +17,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '1.22.2'
-      - name: Build
-        run: go build -v ./...
+      - name: "Build Challenge 1: echo"
+        run: go build -v ./cmd/challenge_1_echo
+      - name: "Build Challenge 2: unique id generation"
+        run: go build -v ./cmd/challenge_2_unique_id_generation
