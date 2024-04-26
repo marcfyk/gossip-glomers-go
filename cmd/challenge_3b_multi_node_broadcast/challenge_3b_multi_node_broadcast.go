@@ -38,13 +38,13 @@ func main() {
 		return node.Reply(msg, map[string]string{"type": "broadcast_ok"})
 	})
 	node.Handle("read", func(msg maelstrom.Message) error {
-		keys := make([]int, 0, len(messages))
-		for k := range messages {
-			keys = append(keys, k)
+		ms := make([]int, 0, len(messages))
+		for m := range messages {
+			ms = append(ms, m)
 		}
 		return node.Reply(msg, map[string]any{
 			"type":     "read_ok",
-			"messages": keys,
+			"messages": ms,
 		})
 	})
 	node.Handle("topology", func(msg maelstrom.Message) error {
