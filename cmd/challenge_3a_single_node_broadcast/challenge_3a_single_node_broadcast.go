@@ -18,25 +18,33 @@ type TopologyRequestBody struct {
 func main() {
 	node := maelstrom.NewNode()
 	neighbours := make([]string, 0)
-	messages := make([]int, 0)
+	messages := make(map[int]struct{})
 	node.Handle("broadcast", func(msg maelstrom.Message) error {
 		var body BroadcastRequestBody
 		if err := json.Unmarshal(msg.Body, &body); err != nil {
 			return err
 		}
-		messages = append(messages, int(body.Message))
+		m := int(body.Message)
+		if _, ok := messages[m]; ok {
+			return nil
+		}
+		messages[m] = struct{}{}
 		for _, id := range neighbours {
 			if id == node.ID() {
 				continue
 			}
-			node.Send(id, msg)
+			node.Send(id, msg.Body)
 		}
 		return node.Reply(msg, map[string]string{"type": "broadcast_ok"})
 	})
 	node.Handle("read", func(msg maelstrom.Message) error {
+		ms := make([]int, 0, len(messages))
+		for m := range messages {
+			ms = append(ms, m)
+		}
 		return node.Reply(msg, map[string]any{
 			"type":     "read_ok",
-			"messages": messages,
+			"messages": ms,
 		})
 	})
 	node.Handle("topology", func(msg maelstrom.Message) error {
