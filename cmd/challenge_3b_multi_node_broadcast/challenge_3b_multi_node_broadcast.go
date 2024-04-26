@@ -28,7 +28,7 @@ func main() {
 		if _, ok := messages[m]; ok {
 			return nil
 		}
-		messages[m] = struct{}{}
+		messages[int(body.Message)] = struct{}{}
 		for _, id := range neighbours {
 			if id == node.ID() {
 				continue
